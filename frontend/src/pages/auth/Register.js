@@ -3,6 +3,9 @@ import styles from './auth.module.scss';
 import { Link } from 'react-router-dom';
 import Card from '../../components/card/Card';
 import loginImg from '../../assets/login.png';
+import { toast } from 'react-toastify';
+import {useDispatch} from 'react-redux';
+import { register } from '../../redux/features/auth/authSlice';
 
 
 const initialState ={
@@ -15,13 +18,44 @@ const initialState ={
 const Register = () => {
   const [formData, setFormData] = useState(initialState);
   const {name, email, password, cPassword} = formData;
+  const dispatch = useDispatch();
 
   const handleInputChange=(e)=>{
       const {name, value} = e.target
       setFormData({...formData, [name]: value})
   };
   
-  const registerUser =()=>{};
+  const registerUser = async (e)=>{
+    e.preventDefault();
+    if (!email || !password) {
+      return toast.error("All fields are required")
+    };
+    if (password.length < 6) {
+      return toast.error("Password must be up to 6 characters")
+    };
+    
+    // Email validation
+    const validateEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
+    if (!validateEmail(email)) {
+      return toast.error("Please enter a valid email address");
+    };
+    if (password !== cPassword) {
+      return toast.error("Passwords do not match");
+    };
+
+    const userData ={
+      name,
+      email,
+      password
+    }
+    await dispatch (register(userData));
+  };
+    
+    
   return (
     <section className={`container ${styles.auth}`}>
     
@@ -34,7 +68,7 @@ const Register = () => {
           type='text'
           placeholder='Name'
           required
-          name={name}
+          name="name"
           value={name}
           onChange={handleInputChange}
         />
@@ -43,7 +77,7 @@ const Register = () => {
           type='text'
           placeholder='Email'
           required
-          name={email}
+          name="email"
           value={email}
           onChange={handleInputChange}
         />
@@ -52,7 +86,7 @@ const Register = () => {
           type='password'
           placeholder='Password'
           required
-          name={password}
+          name="password"
           value={password}
           onChange={handleInputChange}
         />
