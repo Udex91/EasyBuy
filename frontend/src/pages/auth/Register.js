@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './auth.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Card from '../../components/card/Card';
 import loginImg from '../../assets/login.png';
 import { toast } from 'react-toastify';
-import {useDispatch} from 'react-redux';
-import { register } from '../../redux/features/auth/authSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import { register, RESET_AUTH } from '../../redux/features/auth/authSlice';
+import Loader from '../../components/loader/Loader';
 
 
 const initialState ={
@@ -18,7 +19,9 @@ const initialState ={
 const Register = () => {
   const [formData, setFormData] = useState(initialState);
   const {name, email, password, cPassword} = formData;
+  const {isLoading, isLoggedIn, isSuccess} = useSelector((state)=> state.auth)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange=(e)=>{
       const {name, value} = e.target
@@ -55,8 +58,18 @@ const Register = () => {
     await dispatch (register(userData));
   };
     
+
+  useEffect(()=>{
+      if (isSuccess && isLoggedIn) {
+        navigate("/")
+      }
+
+      dispatch(RESET_AUTH());
+  }, [isSuccess, isLoggedIn, dispatch, navigate])
     
   return (
+    <>
+    {isLoading && <Loader/>}
     <section className={`container ${styles.auth}`}>
     
 
@@ -114,6 +127,7 @@ const Register = () => {
     </div>
 
     </section>
+    </>
   )
 }
 
