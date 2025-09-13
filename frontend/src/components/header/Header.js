@@ -5,6 +5,7 @@ import {FaShoppingCart, FaTimes} from 'react-icons/fa';
 import {HiOutlineMenuAlt3} from 'react-icons/hi';
 import { logout, RESET_AUTH } from '../../redux/features/auth/authSlice';
 import { useDispatch } from 'react-redux';
+import ShowOnLogin, { ShowOnLogout } from '../hiddenLink/hiddenLink';
 
 
  export const logo = (
@@ -80,10 +81,19 @@ const Header = () => {
             <div className={styles["header-right"]}>
 
             <span className={styles.links}>
-                <NavLink to={'login'} className={activeLink}>Login</NavLink>
-                <NavLink to={'register'} className={activeLink}>Register</NavLink>
-                <NavLink to={'order-history'} className={activeLink}>My Oder</NavLink>
+                <ShowOnLogout>
+                <NavLink to={'login'} className={activeLink}>
+                Login</NavLink>
+                </ShowOnLogout>
+                <ShowOnLogout>
+                <NavLink to={'register'} className={activeLink}>
+                Register</NavLink>
+                </ShowOnLogout>
+                <ShowOnLogin>
+                <NavLink to={'order-history'} className={activeLink}>My Oder</NavLink></ShowOnLogin>
+                <ShowOnLogin>
                 <Link to={'/'} onClick={logoutUser}>Logout</Link>
+                </ShowOnLogin>
             </span>
             {cart}
                     
