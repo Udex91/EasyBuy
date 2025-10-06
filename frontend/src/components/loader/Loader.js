@@ -22,4 +22,4 @@ export const Spinner = ()=>{
     )
 }
 
-export default Loader
+export default Loader;
