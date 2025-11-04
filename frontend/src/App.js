@@ -1,10 +1,31 @@
-import React from "react";
+import { BrowserRouter, Route, Routes} from 'react-router-dom'
+import Home from './pages/home/home';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/ReactToastify.css";
+
+
 
 const App = () => {
+  axios.defaults.withCredentials = true;
   return (
-    <div>
-      <h1>Hello World!!!</h1>
-    </div>
+    <>
+      <BrowserRouter>
+      <ToastContainer/>
+      <Header/>
+      
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={<Register/>}/>
+        </Routes>
+        <Footer/>
+      </BrowserRouter>
+    </>
   );
 };
 
